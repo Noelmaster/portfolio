@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Noelmaster Video Portfolio</title>
+<meta name="description" content="Short-form video ads, AI UGC and realistic AI b-roll for Meta, TikTok and Reels.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: an editing suite — caption-style hero, a reel wall per track, a live timeline docked at the bottom. Committed dark look. */
+:root{
+  --bg:#0b0b0d; --panel:#141418; --ink:#f3f1ea; --muted:#8c8a93; --line:#25252c;
+  --cap:#ffe14d;   /* caption yellow */
+  --cut:#4d7cff;   /* playhead / selection blue */
+  --rec:#ff4a4a;
+  --font:"Archivo",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--font);overflow-x:hidden;padding-bottom:64px}
+body::after{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:50;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain .6s steps(3) infinite}
+@keyframes grain{33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cap);outline-offset:3px}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:20px;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.top nav{display:flex;gap:22px;flex-wrap:wrap}
+.top nav a{text-decoration:none;color:var(--muted);transition:color .2s}
+.top nav a:hover{color:var(--cap)}
+.rec{display:inline-flex;align-items:center;gap:8px}
+.rec::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--rec);box-shadow:0 0 12px var(--rec);animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+
+/* hero */
+.hero{padding-block:56px 64px;display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+.hero-text{min-width:0}
+.showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:center}
+.showcase .clip:nth-child(2){transform:translateY(-36px)}
+.showcase .clip:nth-child(1){transform:rotate(-2deg)}
+.showcase .clip:nth-child(3){transform:rotate(2deg)}
+.showcase .clip:hover{transform:translateY(-8px) rotate(0)}
+.showcase .frame{border-radius:16px}
+.showcase .meta b{font-size:14px}
+.kicker{font:700 13px var(--mono);color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:28px}
+.kicker b{color:var(--cap);font-weight:700}
+.caption{font:900 clamp(44px,6.2vw,96px)/.92 var(--font);font-stretch:68%;text-transform:uppercase;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.caption .w{display:inline-block;padding:0 .06em;margin:0 .02em .08em 0;border-radius:.08em;transition:background .12s,color .12s,transform .12s}
+.caption .w.on{background:var(--cap);color:#0b0b0d;transform:rotate(-2deg) scale(1.04)}
+.caption .w.done{color:var(--ink)}
+.caption .w.todo{color:#3a3a42}
+.sub{display:grid;gap:28px;justify-items:start;margin-top:36px}
+.sub p{margin:0;color:var(--muted);max-width:50ch;font-size:19px}
+.sub p strong{color:var(--ink);font-weight:600}
+.cta{display:inline-flex;align-items:center;gap:12px;padding:16px 26px;border-radius:999px;background:var(--cap);color:#0b0b0d;font:800 15px var(--font);font-stretch:90%;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;transition:transform .2s}
+.cta:hover{transform:translateY(-3px) rotate(-1deg)}
+.cta span{display:inline-block;transition:transform .2s}
+.cta:hover span{transform:translateX(4px)}
+
+/* marquee */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding-block:16px;background:var(--panel)}
+.marquee .track{display:flex;gap:48px;width:max-content;animation:slide 28s linear infinite;font:800 22px var(--font);font-stretch:75%;text-transform:uppercase;white-space:nowrap}
+.marquee .track span{display:flex;align-items:center;gap:48px}
+.marquee .track span::after{content:"✦";color:var(--cap);font-size:16px}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.stats div{padding:28px 20px;border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font:900 clamp(30px,4vw,48px)/1 var(--font);font-stretch:70%;margin-bottom:8px}
+.stats span{font:500 12px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+/* tracks */
+.track-sec{padding-block:96px 40px}
+.track-head{display:grid;grid-template-columns:auto 1fr;gap:12px 28px;align-items:end;margin-bottom:56px}
+.track-id{font:700 13px var(--mono);color:#0b0b0d;background:var(--cut);padding:6px 10px;border-radius:4px;align-self:start;margin-top:12px}
+.track-head h2{font:900 clamp(38px,6.5vw,88px)/.9 var(--font);font-stretch:70%;text-transform:uppercase;margin:0;text-wrap:balance}
+.track-head h2 em{font-style:normal;color:var(--cap)}
+.track-head p{grid-column:2;margin:0;color:var(--muted);max-width:52ch}
+
+.wall{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;align-items:start}
+.wall .clip:nth-child(even){margin-top:56px}
+.clip{margin:0;min-width:0;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.clip:hover{transform:translateY(-8px) rotate(-1.2deg)}
+.clip:nth-child(even):hover{transform:translateY(-8px) rotate(1.2deg)}
+.frame{position:relative;aspect-ratio:9/16;max-width:100%;border-radius:18px;overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:0 20px 40px -20px #000}
+.clip:hover .frame{border-color:var(--cap)}
+.frame.wide{aspect-ratio:16/9}
+.wall.single{grid-template-columns:1fr;max-width:900px}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:14px;font:700 11px var(--mono);color:var(--muted);text-transform:uppercase;
+  background:linear-gradient(160deg,#1c1c22,#101014 60%),var(--panel)}
+.empty::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,225,77,.07) 50%,transparent 70%);background-size:250% 100%;animation:shine 2.6s linear infinite}
+@keyframes shine{from{background-position:120% 0}to{background-position:-120% 0}}
+.empty .row{display:flex;justify-content:space-between;position:relative}
+.empty .mid{position:relative;text-align:center;font:900 44px var(--font);font-stretch:65%;color:#2c2c34}
+.meta{margin-top:12px}
+.meta b{display:block;font:700 16px/1.3 var(--font)}
+.meta span{font:500 12px var(--mono);color:var(--muted)}
+
+/* toolkit */
+.kit{padding-block:96px;border-top:1px solid var(--line)}
+.kit h2{font:900 clamp(32px,5vw,64px)/.95 var(--font);font-stretch:70%;text-transform:uppercase;margin:0 0 40px}
+.kit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.kit h3{font:700 12px var(--mono);color:var(--cap);text-transform:uppercase;letter-spacing:.1em;margin:0 0 14px}
+.kit ul{list-style:none;margin:0;padding:0}
+.kit li{font:700 clamp(22px,2.6vw,30px)/1.25 var(--font);font-stretch:80%;border-bottom:1px solid var(--line);padding:8px 0;transition:color .2s,padding .2s}
+.kit li:hover{color:var(--cap);padding-left:10px}
+
+/* contact */
+.contact{padding-block:96px 120px;border-top:1px solid var(--line);text-align:left}
+.contact h2{font:900 clamp(52px,11vw,160px)/.85 var(--font);font-stretch:62%;text-transform:uppercase;margin:0 0 40px}
+.contact h2 .w{background:var(--cap);color:#0b0b0d;padding:0 .08em;display:inline-block;transform:rotate(-2deg)}
+.mailrow{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.mail{font:700 clamp(18px,2.4vw,26px) var(--mono);word-break:break-all}
+.copy{font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.08em;background:none;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer}
+.copy:hover{border-color:var(--cap);color:var(--cap)}
+
+/* docked timeline */
+.tl{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(11,11,13,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding:10px max(20px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+.tl-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;font:700 12px var(--mono)}
+.tc{color:var(--cap);font-variant-numeric:tabular-nums;min-width:11ch}
+.lane{position:relative;height:26px;border-radius:4px;overflow:hidden;display:flex;gap:2px}
+.lane a{flex:1;display:flex;align-items:center;padding:0 8px;background:#1d1d24;color:var(--muted);text-decoration:none;font-size:10px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;overflow:hidden}
+.lane a:nth-child(1){flex:.6;background:#2a2410;color:var(--cap)}
+.lane a:hover{color:var(--ink)}
+.head{position:absolute;top:0;bottom:0;width:2px;background:var(--cut);box-shadow:0 0 10px var(--cut);left:0;pointer-events:none}
+.head::before{content:"";position:absolute;top:-1px;left:-5px;border:6px solid transparent;border-top-color:var(--cut)}
+.dur{color:var(--muted)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:48px}
+  .showcase{padding-top:36px}
+  .wall{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stats div:nth-child(2){border-right:0}
+  .stats div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .kit-grid{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .showcase{gap:10px}.showcase .meta{display:none}
+  .track-head{grid-template-columns:1fr}.track-head p{grid-column:1}
+  .wall{gap:14px}.wall .clip:nth-child(even){margin-top:32px}
+  .dur{display:none}.tl-in{grid-template-columns:auto 1fr}
+  .top nav{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap top">
+  <span class="rec">Noelmaster</span>
+  <nav>
+    <a href="#ugc">UGC Ads</a>
+    <a href="#ai">AI Video</a>
+    <a href="#broll">AI B-roll</a>
+    <a href="#vsl">VSL</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div class="hero-text">
+      <div class="kicker">Short-form &amp; AI video editor · <b>Available now</b></div>
+      <h1 class="caption" id="cap">I make ads people don't scroll past</h1>
+      <div class="sub">
+        <p>UGC, direct response and fully <strong>AI-generated ads</strong> for Meta, TikTok and Reels. Strong hooks in the first 3 seconds, tight pacing, and AI b-roll that blends with real footage.</p>
+        <a class="cta" href="#ugc">See all work <span>→</span></a>
+      </div>
+    </div>
+    <div class="showcase" data-section="hero"></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track">
+    <span>UGC Ads</span><span>AI UGC</span><span>Direct Response</span><span>AI B-roll</span><span>Hooks 0–3s</span><span>Meta</span><span>TikTok</span><span>Reels</span><span>VSL</span>
+    <span>UGC Ads</span><span>AI UGC</span><span>Direct Response</span><span>AI B-roll</span><span>Hooks 0–3s</span><span>Meta</span><span>TikTok</span><span>Reels</span><span>VSL</span>
+  </div></div>
+
+  <div class="wrap stats">
+    <div><b>0–3s</b><span>Hook window</span></div>
+    <div><b>8–12</b><span>Finished ads / week</span></div>
+    <div><b>9:16</b><span>Built for the feed</span></div>
+    <div><b>US + AU</b><span>17:00–00:00 BRT overlap</span></div>
+  </div>
+
+  <section class="wrap track-sec" id="ugc">
+    <div class="track-head">
+      <span class="track-id">V1</span>
+      <h2>UGC &amp; <em>direct response</em></h2>
+      <p>Real customer and product footage cut into ads with a hook that stops the thumb, captions on every beat, and a clear call to action.</p>
+    </div>
+    <div class="wall" data-section="ugc"></div>
+  </section>
+
+  <section class="wrap track-sec" id="ai">
+    <div class="track-head">
+      <span class="track-id">V2</span>
+      <h2>AI UGC &amp; <em>AI animation</em></h2>
+      <p>Complete AI ads from prompt to final export: generation, picking the best takes, editing, sound design.</p>
+    </div>
+    <div class="wall" data-section="ai"></div>
+  </section>
+
+  <section class="wrap track-sec" id="broll">
+    <div class="track-head">
+      <span class="track-id">V3</span>
+      <h2>AI b-roll that <em>blends in</em></h2>
+      <p>Generated supporting shots matched to the lighting, lens and grain of real footage, so the cut never breaks.</p>
+    </div>
+    <div class="wall" data-section="broll"></div>
+  </section>
+
+  <section class="wrap track-sec" id="vsl">
+    <div class="track-head">
+      <span class="track-id">V4</span>
+      <h2>VSL &amp; <em>long-form</em></h2>
+      <p>Longer sales videos built to hold attention and drive the purchase, from the opening hook to the final offer.</p>
+    </div>
+    <div class="wall single" data-section="vsl"></div>
+  </section>
+
+  <section class="wrap kit">
+    <h2>The toolkit</h2>
+    <div class="kit-grid">
+      <div><h3>Edit</h3><ul><li>CapCut</li><li>DaVinci Resolve</li><li>Premiere Pro</li><li>Remotion</li></ul></div>
+      <div><h3>Generate</h3><ul><li>Kling · Veo</li><li>Higgsfield · Runway</li><li>MiniMax Hailuo</li><li>Midjourney · Nano Banana</li><li>ComfyUI</li></ul></div>
+      <div><h3>Research &amp; write</h3><ul><li>Meta Ad Library</li><li>TikTok · Reels</li><li>Claude · ChatGPT</li><li>Canva</li></ul></div>
+    </div>
+  </section>
+
+  <section class="wrap contact" id="contact">
+    <h2>Let's cut your <span class="w">next ad</span></h2>
+    <div class="mailrow">
+      <span class="mail" id="email">medeirosfab89@gmail.com</span>
+      <button class="copy" id="copy" type="button">Copy email</button>
+    </div>
+  </section>
+</main>
+
+<div class="tl" aria-label="Page timeline">
+  <div class="tl-in">
+    <span class="tc" id="tc">00:00:00:00</span>
+    <div class="lane">
+      <a href="#cap">Hook</a><a href="#ugc">UGC</a><a href="#ai">AI</a><a href="#broll">B-roll</a><a href="#vsl">VSL</a><a href="#contact">CTA</a>
+      <span class="head" id="head"></span>
+    </div>
+    <span class="dur">00:00:30:00</span>
+  </div>
+</div>
+
+<script>
+// EDIT HERE: YouTube video ID = the part after /shorts/ or ?v=
+// youtube.com/shorts/AbC123xyz  ->  id: "AbC123xyz"
+const VIDEOS = {
+  // The 3 clips next to the headline: they play automatically, muted, on loop
+  hero: [
+    { id: "-c_ESn2qvx8", title: "Customer testimonial", info: "UGC" },
+    { id: "pxca_W4P47Y", title: "Beauty vs money", info: "AI video" },
+    { id: "DQ_Sv4X7rPA", title: "Influencer edit", info: "UGC · Organic" },
+  ],
+  ugc: [
+    { id: "-c_ESn2qvx8", title: "Customer testimonial", info: "Meta · UGC" },
+    { id: "DQ_Sv4X7rPA", title: "Influencer ad edit", info: "Reels · Organic" },
+    { id: "SGtCByxlBOY", title: "Supplement sales creative", info: "Meta · Direct response" },
+    { id: "_MAqUdczeVA", title: "Fitlab app promo", info: "App install · DR" },
+  ],
+  ai: [
+    { id: "pxca_W4P47Y", title: "Beauty vs money", info: "AI video · Viral format" },
+    { id: "MEuIx7fDwRk", title: "Halloween themed ad", info: "AI · Seasonal meme" },
+    { id: "Cawx148IzxI", title: "Discord meme", info: "AI · Meme format" },
+    { id: "", title: "Selfie-cam testimonial", info: "AI UGC" },
+  ],
+  vsl: [
+    { id: "szVcTdpWWWY", title: "Supplement VSL", info: "Video sales letter · 16:9", wide: true },
+  ],
+  broll: [
+    { id: "", title: "Real + AI blend", info: "Mixed · 0:24" },
+    { id: "", title: "Lifestyle inserts", info: "AI b-roll · 0:12" },
+    { id: "", title: "Real vs AI shot", info: "Side by side · 0:15" },
+    { id: "", title: "Product close-ups", info: "AI b-roll · 0:10" },
+  ],
+};
+
+let n = 0;
+for (const [key, list] of Object.entries(VIDEOS)) {
+  document.querySelector(`[data-section="${key}"]`).innerHTML = list.map(v => `
+    <figure class="clip">
+      <div class="frame${v.wide ? " wide" : ""}">${v.id
+        ? `<iframe src="https://www.youtube.com/embed/${v.id}?rel=0&modestbranding=1&playsinline=1${key === "hero" ? `&autoplay=1&mute=1&loop=1&controls=0&playlist=${v.id}` : ""}" title="${v.title}" ${key === "hero" ? "" : 'loading="lazy"'} allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`
+        : `<div class="empty"><div class="row"><span>CLIP ${String(++n).padStart(2,"0")}</span><span>9:16</span></div><div class="mid">ADD<br>VIDEO</div><div class="row"><span>REC</span><span>00:00</span></div></div>`}</div>
+      <figcaption class="meta"><b>${v.title}</b><span>${v.info}</span></figcaption>
+    </figure>`).join("");
+}
+
+// Caption-style hero: words light up one by one, then loop
+const cap = document.getElementById("cap");
+const words = cap.textContent.trim().split(/\s+/);
+cap.innerHTML = words.map(w => `<span class="w">${w}</span>`).join(" ");
+const ws = [...cap.children];
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (still) ws.forEach(w => w.classList.add("done"));
+else {
+  let i = 0;
+  setInterval(() => {
+    ws.forEach((w, k) => w.className = "w " + (k < i ? "done" : k === i ? "on" : "todo"));
+    i = (i + 1) % (ws.length + 4); // short hold on the full line before looping
+  }, 380);
+}
+
+// Docked timeline: playhead + timecode follow scroll (30s @ 30fps)
+const head = document.getElementById("head"), tc = document.getElementById("tc");
+const pad = v => String(v).padStart(2, "0");
+function tick() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = max > 0 ? Math.min(1, scrollY / max) : 0;
+  head.style.left = `calc(${p * 100}% - 1px)`;
+  const f = Math.round(p * 30 * 30);
+  tc.textContent = `00:00:${pad(Math.floor(f / 30))}:${pad(f % 30)}`;
+}
+addEventListener("scroll", tick, { passive: true });
+addEventListener("resize", tick);
+tick();
+
+// Copy email
+document.getElementById("copy").onclick = async e => {
+  const t = document.getElementById("email").textContent;
+  try { await navigator.clipboard.writeText(t); e.target.textContent = "Copied"; }
+  catch { getSelection().selectAllChildren(document.getElementById("email")); e.target.textContent = "Selected"; }
+  setTimeout(() => e.target.textContent = "Copy email", 1600);
+};
+</script>
+</body>
+</html>
